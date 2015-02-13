@@ -1,0 +1,231 @@
+// Es el paquete del proyecto java en donde se generará la clase
+package compiladorcorregir;
+/*Este paquete permite trabajar con los símbolos que se van
+  especificar mñas adelante*/
+import java_cup.runtime.*;
+//Para leer el archivo .txt donde están las entradas 
+import java.io.FileReader;
+
+parser code {:
+
+    /* Reporte de error encontrado. */
+    public void report_error(String message, Object info) {
+        
+        StringBuilder m = new StringBuilder("Error");
+        //Condición que permite saber si el info pertenece a un simbolo o no
+        if (info instanceof java_cup.runtime.Symbol) {
+            /*Aquí se hace un casting para convertir el objeto info a un
+              símbolo*/
+
+          java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+            
+            /*Aqui encuentro la fila y columna, según la ubicación del símbolo 
+            en el archivo .txt de entrada  */
+            int fila=s.left+1;
+            int columna=s.right+1;
+
+            /*En esta parte añadimos al mensaje de error, la fila y la columna,
+               indicacndo la ubicación del error en el archivo de entrada*/
+            if (s.left >= 0) {                
+                m.append(" en la línea "+(fila));
+                if (s.right >= 0)
+                    m.append(", columna "+(columna));
+            }
+        }
+        
+        /*---------DETECCIÓN DE ERRORES----------------------------*/
+        //almaceno el valor del objeto info en un variable String
+        String infor = info + "";
+        //Se crea un arreglo de tipo String para guardar valor de info sin el # 
+        String[] tokens = infor.split("#");        
+        //En una variable entera se almacen el valor obtenido del arreglo tokens en la posición 1
+        int valor=Integer.parseInt(tokens[1]);
+
+/*       Se toma el valor entero de la  variable CORREGIR  de la clases sym , donde están todos los símbolos definidos. 
+        La finalidad de obtener este valor es compararlo con el valor obtenido del arreglo para determinar si este es el palabra 
+        reservada que falta en la sintaxis para que esta sea correcta; en el caso de ser iguales almacena un mensaje  en un variable String
+    */
+
+        if (sym.CORREGIR == valor) {
+            message = "falta operador : corregir_cadena";
+            
+       
+        } else {
+             /*       Se toma el valor entero de la  variable ALFABETO  de la clases sym , donde están todos los símbolos definidos. 
+        La finalidad de obtener este valor es compararlo con el valor obtenido del arreglo para determinar si este es el palabra 
+         que falta en la sintaxis para que esta sea correcta; en el caso de ser iguales almacena un mensaje  en un variable String
+        */
+            if (sym.ALFABETO== valor) {
+                message = "falta la cadena que desea corregir";
+        
+
+            } else {
+
+                 /* Se toma el valor entero de la  variable EOF(FIN DE LINEA)  de la clases sym , donde están todos los símbolos definidos. 
+        La finalidad de obtener este valor es compararlo con el valor obtenido del arreglo para determinar si este es el palabra 
+         que falta en la sintaxis para que esta sea correcta; en el caso de ser iguales almacena un mensaje  en un variable String
+         */
+                if (sym.EOF == valor) {
+                    message = "falta fin de linea:";
+     /*       Se toma el valor entero de la  variable BARRA  de la clases sym , donde están todos los símbolos definidos. 
+        La finalidad de obtener este valor es compararlo con el valor obtenido del arreglo para determinar si este es el palabra 
+         que falta en la sintaxis para que esta sea correcta; en el caso de ser iguales almacena un mensaje  en un variable String
+    */
+                }else{
+                    if (sym.BARRA == valor) {
+                    message = "MAL INGRESADO";
+                    
+                }
+
+                }
+                
+            }
+        }
+     
+//Aqui se presenta el mensaje de error y su ubicación
+        m.append(" : "+message);
+        System.err.println(m);
+    }
+
+   
+    /* Cuando se encuentra un error de donde el sistema no puede
+        recuperarse, se lanza un error fatal. Se despliega el mensaje
+        de error y se finaliza la ejecucion. */
+public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+
+ 
+   /* METODO PARA CORREGIR LA PALABRA INGRESADA - RECIBO COMO PARAMETRO EL TOKEN
+     AL  QUE SE ENCUENTRA ASOCIADO LA CADENA A CORREGIR Y DEVUELVO LA CADENA CORREGIDA*/
+    public String corregir(token palabra){
+        /* Asigno la cadena ingresada a una varible de tipo string */
+        String c1=palabra.getCadena();
+        String cade = c1;
+        String cadenafinal="";
+        /* A la varible cade de tipo string le asigno una subcadena de la palabra ingresada  
+        que no contenga unicamente la terminologia cion o sion   */
+        cade = c1.substring(0, c1.length() - 4);
+        //System.out.println("esta es la subcadena: " + cade);
+/*Comparo la subcadena para verificar que palabra  es la que se tiene que corregir */
+        if (cade.equalsIgnoreCase("can")) {
+           // System.out.println("cancion");
+    /*A la varible cadenafinal le asigno la palabra escrita de forma correcta */
+            cadenafinal="cancion";
+        } if (cade.equalsIgnoreCase("oposi")) {
+             //   System.out.println("oposicion");
+            cadenafinal="oposicion";
+        }if (cade.equalsIgnoreCase("ac")) {
+             //   System.out.println("oposicion");
+            cadenafinal="accion";
+        }  if (cade.equalsIgnoreCase("adi")) {
+             //   System.out.println("oposicion");
+            cadenafinal="adicion";
+        } if (cade.equalsIgnoreCase("frac")) {
+             //   System.out.println("oposicion");
+            cadenafinal="fraccion";
+        } if (cade.equalsIgnoreCase("ilu")) {
+             //   System.out.println("oposicion");
+            cadenafinal="ilusion";
+        } if (cade.equalsIgnoreCase("mi")) {
+             //   System.out.println("oposicion");
+            cadenafinal="mision";
+        } if (cade.equalsIgnoreCase("vi")) {
+             //   System.out.println("oposicion");
+            cadenafinal="vision";
+        } if (cade.equalsIgnoreCase("ver")) {
+             //   System.out.println("oposicion");
+            cadenafinal="version";
+        } if (cade.equalsIgnoreCase("deci")) {
+             //   System.out.println("oposicion");
+            cadenafinal="decision";
+        } 
+         
+         
+
+        return cadenafinal;
+
+    }
+
+:}
+
+
+/*­­­ Declaración de la lista de símbolos de la gramática ­­­­­*/
+
+//------------------DECLARACION DE LAS VARIABLES TERMINALES------------------------
+/*­­­ Estas variables son los tokens que genero el analizador lexico  ­­­­­*/
+terminal  token IMPRIMIR, CORREGIR, BARRA;
+terminal  token ALFABETO;
+
+//------------------DECLARACION DE LAS VARIABLES NO TERMINALES----------------------------
+/* son variables auxiliares que va permitir estructurar  las reglas sintacticas del lenguaje
+del compilador */
+non terminal  programa,  expresion1, expresion2, expresion3;
+non terminal reservada1, reservada2;
+
+
+
+//­­­­­­­­­­­­­­----- DECLARACION DE LA GRAMATICA---------------­­­­­­­­­­
+/*­­­­INICIAR la ejecucion desde la reglas sintactica que contegan la varible programa ­­­*/
+start with programa;
+
+/*­­­ la sintaxis de entrada que debe recibir es:
+imprimir corregir_palabra palabra  /   => imprime la palabra corregida
+corregir_palabra palabra /             => corrige la palabra pero no imprime
+con las variables terminales seria:
+IMPRIMIR CORREGIR ALFABETO BARRA    O  CORREGIR ALFABETO BARRA 
+
+; pero reservada1 contiene a ALFABETO
+con lo que se obtiene :  IMPRIMIR CORREGIR ALFABETO BARRA y como se puede 
+notar se logra establecer las reglas que me permitan llegar a la una expresion final
+compuesta solo de variables terminales.
+
+==Si solo se desea corregir la cadena empezamos por la expresión programa pero que ente caso contiene:  
+   expresion2 BARRA; pero expresion2 contiene CORREGIR  reservada2 por lo tanto
+se tendríamos :
+CORREGIR reservada2 BARRA; pero reservada2 contiene el ALFABETO  con lo que se obtiene:
+CORREGIR ALFABETO BARRA y como se puede  notar se logra establecer las reglas que me permite llegar
+ a la una expresión final compuesta solo de variables terminales.
+
+
+== Iniciando por programa tambien se tiene la variable expresion3 que es la que me permite detectar 
+los errores de sintaxis
+­­­­­*/
+
+
+
+programa ::= IMPRIMIR expresion1 BARRA |expresion2 BARRA | expresion3;
+
+
+expresion1 ::= CORREGIR reservada1; 
+
+reservada1 ::= ALFABETO:a {: System.out.println("PALABRA INGRESADA: "+a.getCadena());System.out.println("PALABRA CORREGIDA: "
+    +new AnalizadorSintactico().corregir(a));:};
+
+expresion2 ::= CORREGIR reservada2 ; 
+
+reservada2 ::= ALFABETO:a {: System.out.println("PALABRA INGRESADA: "+a.getCadena());:};
+
+
+/*Aqui se analiza la gramática que será un error cuando no exista el operador corregir_palabra */
+/*Se crea una variable de tipo Symbol, en donde se obtiene el símbolo que está dando error
+                  mdiante el método de la clase parser  getSymbolFactory(), esté mètodo recibe 5 datos como parámetros
+                  1. el nombre del no terminal en este caso "sentencia"
+                  2. el identificador de este no termiinal, que en este caso es 4
+                  3. el símbolo que está en la parte iquierda por eso se resta -1;
+                  4. el símbolo que está en la parte dereccha
+                  5. el objeto, es decir el símbolo que está dando el error, almacenado implícitamente 
+                  en la variable RESULT de la expresión 
+                  */
+
+expresion3::= IMPRIMIR ALFABETO:a BARRA{:CUP$AnalizadorSintactico$result = parser.getSymbolFactory().newSymbol("expresion3",3,
+ ((java_cup.runtime.Symbol)CUP$AnalizadorSintactico$stack.elementAt(CUP$AnalizadorSintactico$top-1)), ((java_cup.runtime.Symbol)CUP$AnalizadorSintactico$stack.peek()), RESULT);
+/* Aqui se llama al método report_error, que recibe como parámetros el mensaje y el obejeto de tipo symbol que en este caso es result*/
+parser.report_error ("c",CUP$AnalizadorSintactico$result);:};
+
+
+
+
+
+
